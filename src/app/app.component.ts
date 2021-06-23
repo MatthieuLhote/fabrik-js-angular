@@ -102,15 +102,15 @@ export class AppComponent implements OnInit{
     })
 
     this.canvas.on('mouse:wheel', function(opt) {
-      console.log("EVT ok")
       var delta = opt.e.deltaY;
-  var zoom = this.canvas.getZoom();
-  zoom *= 0.999 ** delta;
-  if (zoom > 20) zoom = 20;
-  if (zoom < 0.01) zoom = 0.01;
-  this.canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
-  opt.e.preventDefault();
-  opt.e.stopPropagation();
+      console.log(self.canvas);
+      var zoom = self.canvas.getZoom();
+      zoom *= 0.999 ** delta;
+      if (zoom > 20) zoom = 20;
+      if (zoom < 0.01) zoom = 0.01;
+      self.canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+      opt.e.preventDefault();
+      opt.e.stopPropagation();
     })
 
     
