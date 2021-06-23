@@ -101,23 +101,10 @@ export class AppComponent implements OnInit{
     let add: any;
     switch (figure) {
       case 'rectangle':
-        add = new fabric.Rect({
-          width: 200, height: 100, left: 10, top: 10, angle: 0,
-          fill: '#3f51b5',
-          strokeWidth: 2,
-          shadow: 'rgba(0, 0, 0, 0.4) 3px 3px 7px',
-          originX: 'center',
-          originY: 'center',
-          centeredRotation: true,
-          snapAngle: 45,
-          selectable: true
-        });
+        this.addRect(0, 0, 60, 60);
         break;
       case 'square':
-        add = new fabric.Rect({
-          width: 100, height: 100, left: 10, top: 10, angle: 0,
-          fill: '#4caf50'
-        });
+       this.addChair(0, 0);
         break;
       case 'triangle':
         add = new fabric.Triangle({
@@ -162,8 +149,10 @@ export class AppComponent implements OnInit{
       o.hasControls = false;
       o.lockMovementX = true;
       o.lockMovementY = true;
-      
-        o.selectable = false;
+      if (o.type === 'chair' || o.type === 'bar' || o.type === 'wall') {
+        o.selectable = false
+      }
+       
       
       o.borderColor = '#38A62E';
       o.borderScaleFactor = 2.5;
@@ -179,7 +168,10 @@ export class AppComponent implements OnInit{
       o.hasControls = true;
     o.lockMovementX = false;
     o.lockMovementY = false;
+    if (o.type === 'chair' || o.type === 'bar' || o.type === 'wall') {
       o.selectable = true;
+    }
+      
       o.borderColor = 'rgba(102, 153, 255, 0.75)';
       o.borderScaleFactor = 1;
     });
@@ -190,6 +182,7 @@ export class AppComponent implements OnInit{
   }
 
   addChair(left, top, width?:number, height?:number) {
+    const id = JSON.stringify(this.generateId())
     const o = new fabric.Rect({
       left: left,
       top: top,

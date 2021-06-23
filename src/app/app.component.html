@@ -331,28 +331,28 @@
 
   <!-- <canvas style="border:1px solid #000000;" id="myCanvas" width="1000" height="1000"></canvas> -->
 
-  <div class="container w-100" style="width:100%;">
+  <div class="container w-100" >
     <div class="row">
         <div class="col-xl-12 main-title">
             <h4>Github: <a href="https://github.com/kevoj/angular-editor-fabric-js">angular-editor-fabric-js</a></h4>
         </div>
     </div>
     <div class="row">
-      <div class="col-xl-6">
+      <div class="col-xl-12">
         <div class="card-header">Add figure</div>
         <div class="card-body text-center max-height">
-            <div class="btn-group btn-group-vertical" role="group" aria-label="...">
+            <div class="btn-group" role="group" aria-label="...">
                 <button type="button" class="btn btn-primary" (click)="addFigure('rectangle');">Rectangle</button>
                 <button type="button" class="btn btn-primary" (click)="addFigure('square');">Square</button>
                 <button type="button" class="btn btn-primary" (click)="addFigure('triangle');">Triangle</button>
                 <button type="button" class="btn btn-primary" (click)="addFigure('circle');">Circle</button>
-                <button type="button" class="btn btn-primary" (click)="remove();">Circle</button>
+                <button type="button" class="btn btn-danger" (click)="remove();">delete</button>
             </div>
         </div>
         </div>
     </div>
     <div class="row">
-      <div class="col-xl-6">
+      <div class="col-xl-12">
           <canvas id="canvas"></canvas>
       </div>
     </div>
