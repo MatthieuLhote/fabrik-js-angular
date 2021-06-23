@@ -342,11 +342,12 @@
         <div class="card-header">Add figure</div>
         <div class="card-body text-center max-height">
             <div class="btn-group" role="group" aria-label="...">
-                <button type="button" class="btn btn-primary" (click)="addFigure('rectangle');">Rectangle</button>
-                <button type="button" class="btn btn-primary" (click)="addFigure('square');">Square</button>
-                <button type="button" class="btn btn-primary" (click)="addFigure('triangle');">Triangle</button>
-                <button type="button" class="btn btn-primary" (click)="addFigure('circle');">Circle</button>
-                <button type="button" class="btn btn-danger" (click)="remove();">delete</button>
+                <button *ngIf="isAdminMode" type="button" class="btn btn-primary" (click)="addFigure('rectangle');">Rectangle</button>
+                <button *ngIf="isAdminMode" type="button" class="btn btn-primary" (click)="addFigure('square');">Square</button>
+                <!-- <button *ngIf="isAdminMode" type="button" class="btn btn-primary" (click)="addFigure('triangle');">Triangle</button> -->
+                <button *ngIf="isAdminMode" type="button" class="btn btn-primary" (click)="addFigure('circle');">Circle</button>
+                <button *ngIf="isAdminMode" type="button" class="btn btn-danger" (click)="remove();">delete</button>
+                <button *ngIf="isAdminMode" type="button" class="btn btn-success" (click)="book();">Book</button>
             </div>
         </div>
         </div>

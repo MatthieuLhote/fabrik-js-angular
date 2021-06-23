@@ -15,23 +15,24 @@ export class AppComponent implements OnInit{
   // file:File = null;
   // canvas:any;
 
+  isAdminMode = true;
   number = 0;
 
-   backgroundColor = '#f8f8f8'
- lineStroke = '#ebebeb'
- tableFill = 'rgba(150, 111, 51, 0.7)'
- tableStroke = '#694d23'
- tableShadow = 'rgba(0, 0, 0, 0.4) 3px 3px 7px'
- chairFill = 'rgba(67, 42, 4, 0.7)'
- chairStroke = '#32230b'
- chairShadow = 'rgba(0, 0, 0, 0.4) 3px 3px 7px'
- barFill = 'rgba(0, 93, 127, 0.7)'
- barStroke = '#003e54'
- barShadow = 'rgba(0, 0, 0, 0.4) 3px 3px 7px'
- barText = 'Bar'
- wallFill = 'rgba(136, 136, 136, 0.7)'
- wallStroke = '#686868'
- wallShadow = 'rgba(0, 0, 0, 0.4) 5px 5px 20px'
+   backgroundColor = '#f8f8f8';
+ lineStroke = '#ebebeb';
+ tableFill = 'rgba(150, 111, 51, 0.7)';
+ tableStroke = '#694d23';
+ tableShadow = 'rgba(0, 0, 0, 0.4) 3px 3px 7px';
+ chairFill = 'rgba(67, 42, 4, 0.7)';
+ chairStroke = '#32230b';
+ chairShadow = 'rgba(0, 0, 0, 0.4) 3px 3px 7px';
+ barFill = 'rgba(0, 93, 127, 0.7)';
+ barStroke = '#003e54';
+ barShadow = 'rgba(0, 0, 0, 0.4) 3px 3px 7px';
+ barText = 'Bar';
+ wallFill = 'rgba(136, 136, 136, 0.7)';
+ wallStroke = '#686868';
+ wallShadow = 'rgba(0, 0, 0, 0.4) 5px 5px 20px';
 
 
   private canvas: any;
@@ -69,19 +70,47 @@ export class AppComponent implements OnInit{
 
   ngOnInit() {
 
+    let imgUrl = '../assets/images/workspace.png';
+    let img = new Image(); 
+
+    img.src = imgUrl;
+    let self = this;
+    img.onload = function (event) {
+          let  loadedImage = event.currentTarget;
+          loadedImage['naturalHeight'];
+          console.log(loadedImage['naturalHeight']);
+          console.log(loadedImage['naturalWidth']);
+          self.size.width = loadedImage['naturalWidth'];
+          self.size.height = loadedImage['naturalHeight'];
+    } 
+
+
     this.canvas = new fabric.Canvas('canvas', {
+      backgroundImage: '../assets/images/workspace.png',
       hoverCursor: 'pointer',
       selection: true,
       selectionBorderColor: 'blue'
     });
 
-     this.canvas.setWidth(this.size.width);
-     this.canvas.setHeight(this.size.height);
+     this.canvas.setWidth(2587);
+     this.canvas.setHeight(1438);
 
     this.canvas.on({
       'mouse:up': (e)=>{
         this.myfunction(e)
       }
+    })
+
+    this.canvas.on('mouse:wheel', function(opt) {
+      console.log("EVT ok")
+      var delta = opt.e.deltaY;
+  var zoom = this.canvas.getZoom();
+  zoom *= 0.999 ** delta;
+  if (zoom > 20) zoom = 20;
+  if (zoom < 0.01) zoom = 0.01;
+  this.canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+  opt.e.preventDefault();
+  opt.e.stopPropagation();
     })
 
     
@@ -112,10 +141,8 @@ export class AppComponent implements OnInit{
         });
         break;
       case 'circle':
-        add = new fabric.Circle({
-          radius: 50, left: 10, top: 10, fill: '#ff5722'
-        });
-        break;
+        this.addHalfCircle();
+         break;
     }
     this.extend(add, this.randomId());
     this.canvas.add(add);
@@ -145,6 +172,7 @@ export class AppComponent implements OnInit{
   }
 
   customerMode(){
+    this.isAdminMode=false;
     this.canvas.getObjects().map(o => {
       o.hasControls = false;
       o.lockMovementX = true;
@@ -164,6 +192,7 @@ export class AppComponent implements OnInit{
   }
 
   adminMode(){
+    this.isAdminMode=true;
     this.canvas.getObjects().map(o => {
       o.hasControls = true;
     o.lockMovementX = false;
@@ -179,6 +208,24 @@ export class AppComponent implements OnInit{
     this.canvas.hoverCursor = 'move'
     this.canvas.discardActiveObject()
     this.canvas.renderAll()
+  }
+
+  addHalfCircle(){
+    const id = JSON.stringify(this.generateId());
+    const o = new fabric.Circle({
+      fill: '#ff5722',
+      radius: 20,
+      left: 60,
+      top: 10,
+      angle: 90,
+      startAngle: 0,
+      endAngle: Math.PI,
+      stroke: '#000',
+      strokeWidth: 3,
+    })
+    o["id"]=id;
+    this.canvas.add(o)
+    return o
   }
 
   addChair(left, top, width?:number, height?:number) {
@@ -199,11 +246,13 @@ export class AppComponent implements OnInit{
       selectable: true,
       type: 'chair'
     })
+    o["id"]=id;
     this.canvas.add(o)
     return o
   }
 
   addBar(left, top, width, height) {
+    const id = JSON.stringify(this.generateId())
     const o = new fabric.Rect({
       width: width,
       height: height,
@@ -215,6 +264,7 @@ export class AppComponent implements OnInit{
       originY: 'center',
       type: 'bar'
     })
+    o["id"]=id;
     const t = new fabric.IText("Bar", {
       fontFamily: 'Calibri',
       fontSize: 14,
@@ -236,6 +286,7 @@ export class AppComponent implements OnInit{
   }
 
   addWall(left, top, width, height) {
+    const id = JSON.stringify(this.generateId())
     const o = new fabric.Rect({
       left: left,
       top: top,
@@ -252,6 +303,7 @@ export class AppComponent implements OnInit{
       selectable: true,
       type: 'wall'
     })
+    o["id"]=id;
     this.canvas.add(o)
     return o
   }
@@ -271,6 +323,7 @@ export class AppComponent implements OnInit{
       snapAngle: 45,
       selectable: true
     })
+    o["id"]=id;
     const t = new fabric.IText(this.number.toString(), {
       fontFamily: 'Calibri',
       fontSize: 14,
@@ -287,6 +340,7 @@ export class AppComponent implements OnInit{
       selectable: true,
       type: 'table'
     })
+    g["id"]=id;
     this.canvas.add(g)
     this.number++
     return g
@@ -304,6 +358,16 @@ export class AppComponent implements OnInit{
       this.canvas.discardActiveObject()
       this.canvas.renderAll()
     }
+    //var objects = this.canvas.getObjects();
+  // for(var i = 0; i < objects.length; i++){
+  // //console.log(objects[i]);     
+  //   this.canvas.remove(objects[i]);
+  //   }this.canvas.renderAll();
+  }
+
+  book(){
+    const o = this.canvas.getActiveObject();
+    console.log(o);
   }
 
 
